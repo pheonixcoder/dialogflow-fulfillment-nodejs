@@ -61,6 +61,8 @@ class WebhookClient {
       throw new Error('Response can NOT be empty.');
     }
 
+    this.isLambda = Boolean(options.isLambda);
+
     /**
      * The Express HTTP request that the endpoint receives from the Assistant.
      * @private
@@ -74,6 +76,10 @@ class WebhookClient {
      * @type {Object}
      */
     this.response_ = options.response;
+    
+    if (this.isLambda) {
+      this.request_.body = JSON.parse(this.request_.body);
+    }
 
     /**
      * The agent version (v1 or v2) based on Dialogflow webhook request
